@@ -1,0 +1,17 @@
+import com.itextpdf.text.Document;
+
+public class Project04_B {
+	//Paragraph : 단락, 문장, 절 만들기
+	//chunk : (규모가 큰 부분) 만들기
+	public static void main(String[] args) {
+		
+		//가상의 pdf 파일 만들기
+		Document doc = new Document();
+		
+		try {
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}

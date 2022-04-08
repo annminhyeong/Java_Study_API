@@ -1,0 +1,17 @@
+
+public class Project05_B_MutiCilent {
+	public static void main(String[] arg) {
+		try {
+			Socket socket = new Socket("127.0.0.1", 9999);
+			Scanner scanner = new Scanner(System.in);
+			System.out.print("name:");
+			String name = scanner.nextLine();
+			Thread sender = new Thread(new ClientSender(socket, name));
+			Thread receiver = new Thread(new ClientReceiver(socket));
+			sender.start();
+			receiver.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}

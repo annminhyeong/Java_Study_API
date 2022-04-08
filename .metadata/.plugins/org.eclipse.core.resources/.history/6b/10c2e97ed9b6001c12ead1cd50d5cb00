@@ -1,0 +1,37 @@
+import java.net.*;
+import java.util.Scanner;
+import java.io.*;
+
+public class Project05_A_Client {
+	
+	public static void main(String[] args) {
+		try {
+			//소켓 만들기
+			Socket socket = new Socket("127.0.0.1",9999); // -----> accept()
+			System.out.println("Connect Success!");
+			//키보드로 입력하기
+			Scanner scanner = new Scanner(System.in);
+			//한줄 읽기
+			String message =  scanner.nextLine();
+			
+			//서버에 메세지 보내기
+			OutputStream out = socket.getOutputStream();
+			//한글깨짐 방지
+			DataOutputStream dos = new DataOutputStream(out);
+			//소켓에 메세지 보내기
+			dos.writeUTF(message);
+			
+			//서버에서 보낸 메세지 읽기
+			InputStream in = socket.getInputStream();
+			//한글깨짐 방지
+			DataInputStream dis = new DataInputStream(in);
+			
+			//소켓 
+			
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}

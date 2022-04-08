@@ -1,0 +1,231 @@
+package dao;
+
+import java.io.*;
+import java.net.*;
+import java.util.*;
+
+import org.apache.poi.hssf.usermodel.*;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.*;
+import org.jsoup.nodes.Element;
+
+import dto.ExcelDTO;
+import util.DownloadBroker;
+
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.Row;
+public class ExcelDAO {
+	private List<ExcelDTO> list;
+	private HSSFWorkbook wb;
+	
+	public ExcelDAO() {
+		list = new ArrayList<ExcelDTO>();
+		wb = new HSSFWorkbook();
+	}
+	
+	public void excel_input() {
+		
+		//입력 객체 생성
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		try {
+			
+			//엑셀 시트 생성
+			HSSFSheet firstsheet = wb.createSheet("BOOK SHEET");
+			//재목 1번 row 생성(열)
+			HSSFRow rowA = firstsheet.createRow(0);
+			
+			//0번째 셀 생성
+			HSSFCell cellA = rowA.createCell(0);
+			//셀에 값 넣기
+			cellA.setCellValue(new HSSFRichTextString("책제목"));
+			
+			//1번째 셀 생성
+			HSSFCell cellB = rowA.createCell(1);
+			//셀에 값 넣기
+			cellB.setCellValue(new HSSFRichTextString("저자"));
+			
+			//2번째 셀 생성
+			HSSFCell cellC = rowA.createCell(1);
+			//셀에 값 넣기
+			cellC.setCellValue(new HSSFRichTextString("출판사"));
+			
+			//3번째 셀 생성
+			HSSFCell cellD = rowA.createCell(1);
+			//셀에 값 넣기
+			cellD.setCellValue(new HSSFRichTextString("isbn"));
+			
+			//4번째 셀 생성
+			HSSFCell cellE = rowA.createCell(1);
+			//셀에 값 넣기
+			cellE.setCellValue(new HSSFRichTextString("이미지이름"));
+			
+			//5번째 셀 생성
+			HSSFCell cellF = rowA.createCell(1);
+			//셀에 값 넣기
+			cellF.setCellValue(new HSSFRichTextString("이미지"));
+			
+			//Book 데이터
+			int i=1;
+			while(true) {
+				System.out.print("책 제목:");
+				String title = br.readLine();
+				
+				System.out.print("저자:");
+				String author = br.readLine();
+				
+				System.out.print("출판사:");
+				String company = br.readLine();
+				
+				HSSFRow rowRal = firstsheet.createRow(i);
+				//0번째 셀 생성
+				HSSFCell cellTitle= rowRal.createCell(0);
+				cellTitle.setCellValue(new HSSFRichTextString(title));
+				
+				//1번째 셀 생성
+				HSSFCell cellAuthor= rowRal.createCell(1);
+				cellAuthor.setCellValue(new HSSFRichTextString(author));
+				
+				//2번째 셀 생성
+				HSSFCell cellCompany= rowRal.createCell(2);
+				cellCompany.setCellValue(new HSSFRichTextString(author));
+				
+				i++;
+				
+				ExcelDTO dto = new ExcelDTO(title, author, company);
+				ExcelDTO data = naver_search(dto);
+				
+				list.add(data);
+				System.out.print("계속 입력 y / 입력 종료: n :");
+				String key = br.readLine();
+				if(key.equals("n")) break;
+			}
+			System.out.println("데이터 추출중.....");
+			excel_save();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void excel_save() {
+		try {
+			//시트 가져오기
+			HSSFSheet sheet = wb.getSheetAt(0);
+			
+			//workbook과 sheet가 null이 아니면
+			if(wb != null && sheet != null) {
+				//전체 row 가져오기
+				Iterator<Row> rows= sheet.rowIterator();
+				//첫줄은 서식이므로 넘김
+				rows.next();
+				
+				int i = 0;
+				//row에 다음값이 있으면
+				while(rows.hasNext()) {
+					//row에 값넣기
+					HSSFRow row = (HSSFRow) rows.next();
+					
+					//출판사 다음의 셀값이 들어가야 하므로 3번째 부터 넣음
+					HSSFCell cell = row.createCell(3);
+					//셀 타입 지정
+					cell.setCellType(CellType.STRING);
+					//셀에 값넣기
+					cell.setCellValue(list.get(i).getIsbn());
+					
+					//isbn 다음의 셀값이 들어가야 하므로 3번째 부터 넣음
+					cell = row.createCell(4);
+					//셀 타입 지정
+					cell.setCellType(CellType.STRING);
+					//셀에 값넣기
+					cell.setCellValue(list.get(i).getImgurl());
+					
+					//엑셀에 이미지 넣기
+					InputStream inputstream = new FileInputStream(list.get(i).getImgurl());
+					
+				}
+			  	
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		
+	}
+
+	private ExcelDTO naver_search(ExcelDTO dto) {
+		try {
+			String bookAPI = "https://openapi.naver.com/v1/search/book_adv.xml?";
+			bookAPI += "d_titl="+URLEncoder.encode(dto.getTitle(), "UTF-8");
+			bookAPI += "&d_auth="+URLEncoder.encode(dto.getAuthor(), "UTF-8");
+			bookAPI += "&d_publ="+URLEncoder.encode(dto.getCompany(), "UTF-8");
+			
+			//URL 객체 생성
+			URL url = new URL(bookAPI);
+			
+			//URL 연결
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			
+			//URL 호출 필요정보
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("X-Naver-Client-Id", "0d9qeS9wLCpLJQ0Q0dwH");
+			conn.setRequestProperty("X-Naver-Client-Secret", "wEFUV2zJfQ");
+			
+			//URL 연결확인
+			int getResponseCode = conn.getResponseCode();
+			
+			BufferedReader br1;
+			
+			//성공
+			if(getResponseCode==200) {
+				br1 = new BufferedReader(new InputStreamReader(conn.getInputStream(),"UTF-8"));
+			}else {
+				br1 = new BufferedReader(new InputStreamReader(conn.getErrorStream()));
+			}
+			//xml 데이터를 한줄씩 읽어옴
+			String inputLine;
+			
+			//xml 데이터 저장
+			StringBuffer response = new StringBuffer();
+			
+			while((inputLine = br1.readLine())!= null) {
+				response.append(inputLine);
+				
+			}
+			br1.close();
+			
+			//전체 xml 파일을 html 형태로 변환
+			Document doc = Jsoup.parse(response.toString());
+			//System.out.println(doc.toString());
+			
+			Element total = doc.select("total").first();
+			System.out.println(total.text());
+			
+			if(!(total.text().equals("0"))){
+				//isbn 추출
+				Element isbn = doc.select("isbn").first();
+				String isbnStr = isbn.text();
+				//공백을으로 자른다음 두번째 값 가져오기
+				String isbn_find = isbnStr.split(" ")[1];
+				dto.setIsbn(isbn_find);
+				
+				//image 추출
+				String imgDoc = doc.toString();
+				String imgTag = imgDoc.substring(imgDoc.indexOf("<img>")+5);
+				String imgURL = imgTag.substring(0, imgTag.indexOf("?"));
+				String fileName = imgURL.substring(imgURL.lastIndexOf("/")+1);
+				dto.setImgurl(fileName);
+				System.out.println(dto);
+				
+				Runnable dl = new DownloadBroker(imgURL, fileName);
+				Thread t = new Thread(dl);
+				t.start();
+			}else {
+				System.out.println("검색 데이터가 없습니다.");
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return dto;
+	}
+
+}

@@ -1,0 +1,174 @@
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import dto.ExcelDTO;
+
+public class Project04_E {
+	public static void main(String[] args) {
+		//엑셀 파일경로
+		String fileName = "ibsn.xls";
+		
+		//엑셀 데이터 담기
+		List<ExcelDTO> data = new ArrayList<ExcelDTO>();
+		
+		//파일객체 생성
+		try(FileInputStream fis = new FileInputStream(fileName)) {
+			
+			//엑셀파일을 읽어서 로딩 (가상의 엑셀파일을 생성)
+			HSSFWorkbook workbook = new HSSFWorkbook(fis);
+			
+			//엑셀의 첫번째 시트 선택
+			HSSFSheet sheet = workbook.getSheetAt(0);
+			
+			//시트에서 전체열을 iterator 형태로 가져옴
+			Iterator<Row> rows = sheet.rowIterator();
+			
+			//첫번째는 데이터가 2번째 부터 데이터를 가져옴
+			rows.next();
+			
+			//임시 배열
+			String[] imsi = new String[5];
+			
+			//row에 데이터가 있으면 ture 없으면 false
+			while(rows.hasNext()) {
+				
+				//한줄의 열의 데이터를 가져옴
+				HSSFRow row = (HSSFRow) rows.next();
+				
+				//열의 전체 셀(칼럼) 가져오기
+				Iterator<Cell> cells = row.cellIterator();
+				
+				int i = 0;
+				//cell의 값이 존재하면 true 없으면 false
+				while(cells.hasNext()) {
+					
+					//셀값을 하나씩 가져옴
+					HSSFCell cell = (HSSFCell) cells.next();
+					
+					//셀값을 넣는 임시 배열
+					imsi[i] = cell.toString();
+					i++;
+				}
+				
+				ExcelDTO dto = new ExcelDTO(imsi[0], imsi[1], imsi[2], imsi[3], imsi[4]);
+				data.add(dto);
+			}
+			workbook.close();
+			
+			pdf_maker(data);
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void pdf_maker(List<ExcelDTO> data) {
+		
+		String[] headers = new String[] {"책제목","저자","출판사","이미지"};
+		
+		//메모리에 가상의 pdf 생성
+		Document doc = new Document(PageSize.A4);
+		try {
+			//실제 pdf 파일 생성
+			PdfWriter.getInstance(doc, new FileOutputStream("bookList.pdf"));
+			
+			// doc 오픈
+			doc.open();
+			
+			//폰트 설정 
+			//IDENTITY_H : 글자를 가로로 쓴다, NOT_EMBEDDED : 기존의 폰트를 사용하지 않고 외부의 폰트를 사용한다
+			BaseFont bFont = BaseFont.createFont("MALGUN.TTF",BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+			
+			//실제 폰트 만들기 12사이즈
+			Font fontHeader = new Font(bFont, 12);
+			
+			//실제 폰트 만들기 12사이즈
+			Font fontRow = new Font(bFont, 10);
+			
+			//pdf 테이블 생성 사이즈는 list의 사이즈 만큼
+			PdfPTable table = new PdfPTable(data.size());
+			
+			for(String header: headers) {
+				
+				//pdf 셀 만들기
+				PdfPCell cell = new PdfPCell();
+				
+				//셀배경
+				cell.setGrayFill(0.9f);
+				
+				//셀 값넣기
+				cell.setPhrase(new Phrase(header.toUpperCase(), fontHeader));
+				
+				table.addCell(cell);
+			}
+			table.completeRow();
+			
+			for(ExcelDTO dto : data) {
+				//셀 값넣기
+				Phrase phrase = new Phrase(dto.getTitle(), fontRow);
+				//셀 추가
+				table.addCell(new PdfPCell(phrase));
+				
+				//셀 값넣기
+				phrase = new Phrase(dto.getAuthor(), fontRow);
+				//셀 추가
+				table.addCell(new PdfPCell(phrase));
+				
+				//셀 값넣기
+				phrase = new Phrase(dto.getCompany(), fontRow);
+				//셀 추가
+				table.addCell(new PdfPCell(phrase));
+				
+				//셀 값넣기
+				phrase = new Phrase(dto.getTitle(), fontRow);
+				//셀 추가
+				table.addCell(new PdfPCell(phrase));
+			}
+			
+			
+			
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			doc.close();
+		}
+		
+		
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

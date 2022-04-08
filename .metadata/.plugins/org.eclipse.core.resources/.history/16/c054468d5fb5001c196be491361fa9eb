@@ -1,0 +1,30 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class Project03_E {
+	public static void main(String[] args) {
+		
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		try {
+			System.out.print("입력처리(i)/종료(e)");
+			String sw = br.readLine();
+			
+			switch (sw) {
+			case "i":
+				
+				break;
+			case "i":
+				
+				break;
+
+			default:
+				break;
+			}
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+}

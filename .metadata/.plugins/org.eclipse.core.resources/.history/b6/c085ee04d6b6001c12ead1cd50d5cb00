@@ -1,0 +1,27 @@
+import java.net.*;
+import java.io.*;
+
+public class Project05_A_Server {
+	
+	public static void main(String[] args) {
+		
+		//서버 소켓 (안내원)
+		//클라이언트에서 보낸 ip주소와 포트번호를 식별해 클라이언트 고유 소켓 생성
+		ServerSocket ss = null;
+		try {
+			//서버쪽 포트번호 만들기
+			ss = new ServerSocket(9999);
+			System.out.println("Server Ready....");	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		while(true) {
+			try {
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}//while
+	}//main
+}

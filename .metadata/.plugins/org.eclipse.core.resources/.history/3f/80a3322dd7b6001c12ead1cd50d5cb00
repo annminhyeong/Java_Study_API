@@ -1,0 +1,43 @@
+import java.net.*;
+import java.io.*;
+
+public class Project05_A_Server {
+	
+	public static void main(String[] args) {
+		
+		//서버 소켓 (안내원)
+		//클라이언트에서 보낸 ip주소와 포트번호를 식별해 클라이언트 고유 소켓 생성
+		ServerSocket ss = null;
+		try {
+			//서버쪽 포트번호 만들기
+			ss = new ServerSocket(9999);
+			System.out.println("Server Ready....");	
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		while(true) {
+			try {
+				//접속 대기
+				Socket socket = ss.accept();
+				System.out.println("client connect success!");
+				
+				//읽고 쓰기를 위해 IO 객체 생성
+				//먼저 클라이언트에서 온 데이터 읽기
+				InputStream in = socket.getInputStream();
+				//한글데이터 깨짐 방지
+				DataInputStream dis = new DataInputStream(in);
+				//읽은 데이터를 String 행태로 변환
+				String message = dis.readUTF();
+				
+				//클라이언트에게 메세지 보내기
+				OutputStream out = socket.getOutputStream();
+				//한글데이터 깨짐 방지
+				
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}//while
+	}//main
+}//class

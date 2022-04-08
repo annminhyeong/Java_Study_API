@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+    <fullyQualifiedTypeName name="java.lang.String"/>
+    <fullyQualifiedTypeName name="java.io.File"/>
+    <fullyQualifiedTypeName name="com.itextpdf.text.pdf.security.RootStoreVerifier"/>
+    <fullyQualifiedTypeName name="com.itextpdf.text.Element"/>
+    <fullyQualifiedTypeName name="javax.swing.text.TabExpander"/>
+    <fullyQualifiedTypeName name="com.itextpdf.text.Chunk"/>
+    <fullyQualifiedTypeName name="com.itextpdf.text.Paragraph"/>
+    <fullyQualifiedTypeName name="java.io.BufferedReader"/>
+    <fullyQualifiedTypeName name="java.io.InputStreamReader"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
+    <fullyQualifiedTypeName name="org.apache.poi.hssf.usermodel.HSSFWorkbook"/>
+    <fullyQualifiedTypeName name="org.apache.poi.hssf.usermodel.HSSFRichTextString"/>
+    <fullyQualifiedTypeName name="java.lang.Runnable"/>
+    <fullyQualifiedTypeName name="util.DownloadBroker"/>
+    <fullyQualifiedTypeName name="org.apache.poi.hssf.usermodel.HSSFSheet"/>
+    <fullyQualifiedTypeName name="org.apache.poi.hssf.usermodel.HSSFRow"/>
+    <fullyQualifiedTypeName name="org.apache.poi.hssf.usermodel.HSSFCell"/>
+    <fullyQualifiedTypeName name="org.apache.poi.ss.usermodel.CellType"/>
+    <fullyQualifiedTypeName name="java.io.FileInputStream"/>
+    <fullyQualifiedTypeName name="com.itextpdf.text.Document"/>
+    <fullyQualifiedTypeName name="com.itextpdf.text.PageSize"/>
+    <fullyQualifiedTypeName name="com.itextpdf.text.pdf.PdfWriter"/>
+    <fullyQualifiedTypeName name="java.io.FileOutputStream"/>
+    <fullyQualifiedTypeName name="com.itextpdf.text.pdf.BaseFont"/>
+    <fullyQualifiedTypeName name="com.itextpdf.text.Font"/>
+    <fullyQualifiedTypeName name="com.itextpdf.text.pdf.PdfPTable"/>
+    <fullyQualifiedTypeName name="dto.ExcelDTO"/>
+    <fullyQualifiedTypeName name="com.itextpdf.text.Phrase"/>
+    <fullyQualifiedTypeName name="com.itextpdf.text.pdf.PdfPCell"/>
+    <fullyQualifiedTypeName name="com.itextpdf.text.Image"/>
+    <fullyQualifiedTypeName name="java.lang.System"/>
+    <fullyQualifiedTypeName name="java.io.OutputStream"/>
+    <fullyQualifiedTypeName name="java.io.InputStream"/>
+    <fullyQualifiedTypeName name="java.util.HashMap"/>
+    <fullyQualifiedTypeName name="java.util.Collections"/>
+    <fullyQualifiedTypeName name="java.net.ServerSocket"/>
+    <fullyQualifiedTypeName name="java.util.Iterator"/>
+    <fullyQualifiedTypeName name="Project05_B_MutiServer"/>
+    <fullyQualifiedTypeName name="java.lang.Thread"/>
+    <fullyQualifiedTypeName name="java.net.Socket"/>
+    <fullyQualifiedTypeName name="java.util.Scanner"/>
+    <fullyQualifiedTypeName name="java.io.DataOutputStream"/>
+    <fullyQualifiedTypeName name="java.io.DataInputStream"/>
+</qualifiedTypeNameHistroy>
